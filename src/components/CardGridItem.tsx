@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useCallback } from "react";
 import { T } from "../constants";
 import { cardImg } from "../helpers";
 import type { ScryfallCard } from "../types";
@@ -20,11 +20,21 @@ export const CardGridItem = memo(function CardGridItem({
 }: CardGridItemProps) {
   const img = cardImg(card);
   const [hovered, setHovered] = useState(false);
-  const showOverlay = hovered && onAdd && onRemove && collectionQty !== undefined;
+  const hasCollectionProps = onAdd && onRemove && collectionQty !== undefined;
+  const showOverlay = hasCollectionProps && hovered;
+
+  const handleTap = useCallback(() => {
+    // On touch devices, first tap shows overlay, second tap opens card
+    if (hasCollectionProps && !hovered) {
+      setHovered(true);
+      return;
+    }
+    onClick(card);
+  }, [hasCollectionProps, hovered, onClick, card]);
 
   return (
     <div
-      onClick={() => onClick(card)}
+      onClick={handleTap}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -71,8 +81,8 @@ export const CardGridItem = memo(function CardGridItem({
             right: 0,
             display: "flex",
             justifyContent: "center",
-            gap: 4,
-            padding: "8px 12px",
+            gap: 6,
+            padding: "12px 16px",
             background: "linear-gradient(transparent, rgba(0,0,0,0.85))",
           }}
         >
@@ -82,32 +92,33 @@ export const CardGridItem = memo(function CardGridItem({
               onRemove(card.id);
             }}
             style={{
-              width: 32,
-              height: 28,
-              borderRadius: 4,
+              width: 44,
+              height: 40,
+              borderRadius: 6,
               border: `1px solid ${T.border}`,
               background: T.surface,
               color: T.text,
               cursor: "pointer",
               fontFamily: "inherit",
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: 600,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              WebkitTapHighlightColor: "transparent",
             }}
           >
             −
           </button>
           <span
             style={{
-              minWidth: 28,
-              height: 28,
-              borderRadius: 4,
+              minWidth: 40,
+              height: 40,
+              borderRadius: 6,
               background: T.surface,
               border: `1px solid ${T.border}`,
               color: T.accent,
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 700,
               display: "flex",
               alignItems: "center",
@@ -122,19 +133,20 @@ export const CardGridItem = memo(function CardGridItem({
               onAdd(card);
             }}
             style={{
-              width: 32,
-              height: 28,
-              borderRadius: 4,
+              width: 44,
+              height: 40,
+              borderRadius: 6,
               border: `1px solid ${T.border}`,
               background: T.surface,
               color: T.text,
               cursor: "pointer",
               fontFamily: "inherit",
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: 600,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              WebkitTapHighlightColor: "transparent",
             }}
           >
             +

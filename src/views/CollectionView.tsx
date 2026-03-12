@@ -32,6 +32,7 @@ export function CollectionView({
           gap: 16,
           marginBottom: 16,
           alignItems: "baseline",
+          flexWrap: "wrap",
         }}
       >
         <h2 style={{ margin: 0, fontFamily: "'Cinzel', serif", fontSize: 20 }}>

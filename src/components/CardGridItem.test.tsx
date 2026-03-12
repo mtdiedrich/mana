@@ -26,6 +26,32 @@ describe("CardGridItem", () => {
     expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ id: "card-1" }));
   });
 
+  it("first click shows overlay, second click opens card when collection props provided", () => {
+    const onClick = vi.fn();
+    const card = makeCard({
+      image_uris: { small: "https://example.com/bolt.jpg" },
+    });
+
+    const { container } = render(
+      <CardGridItem
+        card={card}
+        onClick={onClick}
+        collectionQty={2}
+        onAdd={vi.fn()}
+        onRemove={vi.fn()}
+      />,
+    );
+
+    // First click shows overlay instead of calling onClick
+    fireEvent.click(container.firstChild as Element);
+    expect(onClick).not.toHaveBeenCalled();
+    expect(screen.getByText("−")).toBeInTheDocument();
+
+    // Second click calls onClick
+    fireEvent.click(container.firstChild as Element);
+    expect(onClick).toHaveBeenCalledWith(card);
+  });
+
   describe("collection overlay buttons", () => {
     it("shows +/- buttons and qty on hover when collection props provided", () => {
       const onAdd = vi.fn();
