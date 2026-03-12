@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String           @id @default(uuid())
+  email        String           @unique
+  displayName  String
+  passwordHash String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  decks        Deck[]
+  collection   CollectionCard[]
+}
+
+model Deck {
+  id        String     @id @default(uuid())
+  name      String
+  format    String     @default("casual")
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cards     DeckCard[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model DeckCard {
+  id         String @id @default(uuid())
+  deckId     String
+  deck       Deck   @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  scryfallId String
+  name       String
+  qty        Int    @default(1)
+  cardData   String // JSON-encoded Scryfall card data (SQLite has no native JSON type)
+
+  @@unique([deckId, scryfallId])
+}
+
+model CollectionCard {
+  id         String @id @default(uuid())
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scryfallId String
+  name       String
+  qty        Int    @default(1)
+  cardData   String // JSON-encoded Scryfall card data
+
+  @@unique([userId, scryfallId])
+}

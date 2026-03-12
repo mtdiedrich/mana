@@ -2,3 +2,8 @@ node_modules/
 dist/
 *.js.map
 *.d.ts.map
+
+# Server
+server/*.db
+server/*.db-journal
+server/.env
