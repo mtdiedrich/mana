@@ -2,7 +2,7 @@ import { COLORS, CARD_TYPES, RARITIES, T } from "../constants";
 import { capitalize } from "../helpers";
 import { Btn, CardGridItem } from "../components";
 import { inputStyle, selectStyle, gridStyle } from "../components/styles";
-import type { ScryfallCard } from "../types";
+import type { DeckCard, ScryfallCard } from "../types";
 
 interface SearchViewProps {
   query: string;
@@ -30,6 +30,9 @@ interface SearchViewProps {
   doSearch: (text: string, page?: number) => void;
   debouncedAutocomplete: (q: string) => void;
   onCardClick: (card: ScryfallCard) => void;
+  collection: DeckCard[];
+  addToCollection: (card: ScryfallCard) => void;
+  removeFromCollection: (cardId: string) => void;
 }
 
 export function SearchView({
@@ -58,6 +61,9 @@ export function SearchView({
   doSearch,
   debouncedAutocomplete,
   onCardClick,
+  collection,
+  addToCollection,
+  removeFromCollection,
 }: SearchViewProps) {
   return (
     <div>
@@ -214,7 +220,14 @@ export function SearchView({
 
       <div style={gridStyle}>
         {results.map((c) => (
-          <CardGridItem key={c.id} card={c} onClick={onCardClick} />
+          <CardGridItem
+            key={c.id}
+            card={c}
+            onClick={onCardClick}
+            collectionQty={collection.find((x) => x.id === c.id)?.qty ?? 0}
+            onAdd={addToCollection}
+            onRemove={removeFromCollection}
+          />
         ))}
       </div>
 
