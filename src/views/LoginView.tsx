@@ -16,7 +16,7 @@ const formBoxStyle: CSSProperties = {
   background: T.surface,
   border: `1px solid ${T.border}`,
   borderRadius: 12,
-  padding: "40px 36px",
+  padding: "clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px)",
   width: "100%",
   maxWidth: 400,
 };

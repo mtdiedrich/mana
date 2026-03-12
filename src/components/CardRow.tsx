@@ -32,14 +32,15 @@ export const CardRow = memo(function CardRow({
         display: "flex",
         alignItems: "center",
         gap: 10,
-        padding: "6px 10px",
+        padding: "8px 10px",
         borderRadius: 6,
         cursor: "pointer",
         background: hovered ? T.surfaceHover : T.surface,
         transition: "background 0.1s",
+        minHeight: 44,
       }}
     >
-      <span style={{ fontSize: 14, fontWeight: 600, color: T.accent, minWidth: 20 }}>
+      <span style={{ fontSize: 14, fontWeight: 600, color: T.accent, minWidth: 24 }}>
         {card.qty}×
       </span>
       {img && (
@@ -49,10 +50,10 @@ export const CardRow = memo(function CardRow({
           style={{ width: 28, height: 40, borderRadius: 3, objectFit: "cover" }}
         />
       )}
-      <span style={{ flex: 1, fontSize: 14 }}>{card.name}</span>
+      <span style={{ flex: 1, fontSize: 14, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{card.name}</span>
       <ManaCost cost={card.mana_cost} size={14} />
       {showSet && (
-        <span style={{ fontSize: 12, color: T.textDim, minWidth: 80 }}>
+        <span style={{ fontSize: 12, color: T.textDim, minWidth: 80, display: "none" }} className="card-row-set">
           {card.set_name}
         </span>
       )}
@@ -60,7 +61,7 @@ export const CardRow = memo(function CardRow({
         {fmtPrice(card.prices?.usd)}
       </span>
       <Btn
-        style={{ padding: "4px 8px", fontSize: 12 }}
+        style={{ padding: "8px 12px", fontSize: 14, minWidth: 36, minHeight: 36 }}
         onClick={(e) => {
           e.stopPropagation();
           onAdd(card);
@@ -69,7 +70,7 @@ export const CardRow = memo(function CardRow({
         +
       </Btn>
       <Btn
-        style={{ padding: "4px 8px", fontSize: 12 }}
+        style={{ padding: "8px 12px", fontSize: 14, minWidth: 36, minHeight: 36 }}
         onClick={(e) => {
           e.stopPropagation();
           onRemove(card.id);

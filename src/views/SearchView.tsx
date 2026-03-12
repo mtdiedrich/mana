@@ -144,19 +144,20 @@ export function SearchView({
               key={k}
               onClick={() => toggleColor(k.toLowerCase())}
               style={{
-                width: 32,
-                height: 32,
+                width: 40,
+                height: 40,
                 borderRadius: "50%",
                 background: active ? c.bg : T.surface,
                 color: active ? c.fg : T.textMuted,
                 border: `2px solid ${active ? c.border : T.border}`,
                 cursor: "pointer",
                 fontWeight: 700,
-                fontSize: 13,
+                fontSize: 14,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 opacity: active ? 1 : 0.6,
+                WebkitTapHighlightColor: "transparent",
               }}
             >
               {k}

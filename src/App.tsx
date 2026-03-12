@@ -60,15 +60,17 @@ export default function App() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "12px 20px",
+          padding: "10px clamp(10px, 3vw, 20px)",
           borderBottom: `1px solid ${T.border}`,
           background: T.surface,
+          flexWrap: "wrap",
+          gap: 6,
         }}
       >
         <span
           style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: 20,
+            fontSize: "clamp(16px, 4vw, 20px)",
             fontWeight: 700,
             color: T.accent,
             letterSpacing: "0.05em",
@@ -76,7 +78,7 @@ export default function App() {
         >
           GRIMOIRE
         </span>
-        <nav style={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <nav style={{ display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap" }}>
           {views.map(([v, label]) => (
             <button key={v} style={navBtnStyle(view === v)} onClick={() => setView(v)}>
               {label}
@@ -111,7 +113,7 @@ export default function App() {
           maxWidth: 1200,
           width: "100%",
           margin: "0 auto",
-          padding: "16px 20px",
+          padding: "12px clamp(10px, 3vw, 20px)",
           boxSizing: "border-box",
         }}
       >

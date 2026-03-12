@@ -37,6 +37,7 @@ export const CardDetailModal = memo(function CardDetailModal({
         justifyContent: "center",
         zIndex: 1000,
         backdropFilter: "blur(4px)",
+        padding: 12,
       }}
       onClick={onClose}
     >
@@ -45,20 +46,21 @@ export const CardDetailModal = memo(function CardDetailModal({
           background: T.surface,
           border: `1px solid ${T.border}`,
           borderRadius: 12,
-          padding: 24,
+          padding: "clamp(16px, 4vw, 24px)",
           maxWidth: 800,
-          width: "90%",
+          width: "100%",
           maxHeight: "90vh",
           overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
           position: "relative",
           display: "flex",
-          gap: 24,
+          gap: "clamp(12px, 3vw, 24px)",
           flexWrap: "wrap",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Card Image */}
-        <div style={{ flex: "0 0 280px", maxWidth: 280 }}>
+        <div style={{ flex: "1 1 200px", maxWidth: 280, margin: "0 auto" }}>
           <img
             src={showBack && backImg ? backImg : (img ?? undefined)}
             alt={card.name}
@@ -214,14 +216,22 @@ export const CardDetailModal = memo(function CardDetailModal({
           onClick={onClose}
           style={{
             position: "absolute",
-            top: 12,
-            right: 16,
-            background: "none",
-            border: "none",
+            top: 8,
+            right: 8,
+            background: T.bg,
+            border: `1px solid ${T.border}`,
+            borderRadius: 8,
             color: T.textMuted,
-            fontSize: 24,
+            fontSize: 22,
             cursor: "pointer",
             lineHeight: 1,
+            width: 40,
+            height: 40,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            WebkitTapHighlightColor: "transparent",
+            zIndex: 1,
           }}
         >
           ×
