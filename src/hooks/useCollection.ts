@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import type { DeckCard, ScryfallCard } from "../types";
 
-const STORAGE_KEY = "mtg-collection";
+function storageKey(userId: string) {
+  return `mtg-collection-${userId}`;
+}
 
-function loadCollection(): DeckCard[] {
+function loadCollection(userId: string): DeckCard[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(userId));
     if (raw) return JSON.parse(raw) as DeckCard[];
   } catch {
     // ignore
@@ -13,20 +15,25 @@ function loadCollection(): DeckCard[] {
   return [];
 }
 
-function saveCollection(collection: DeckCard[]) {
+function saveCollection(userId: string, collection: DeckCard[]) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(collection));
+    localStorage.setItem(storageKey(userId), JSON.stringify(collection));
   } catch {
     // ignore
   }
 }
 
-export function useCollection() {
-  const [collection, setCollection] = useState<DeckCard[]>(loadCollection);
+export function useCollection(userId: string) {
+  const [collection, setCollection] = useState<DeckCard[]>(() => loadCollection(userId));
+
+  // Reload when userId changes
+  useEffect(() => {
+    setCollection(loadCollection(userId));
+  }, [userId]);
 
   useEffect(() => {
-    saveCollection(collection);
-  }, [collection]);
+    saveCollection(userId, collection);
+  }, [userId, collection]);
 
   const addToCollection = useCallback((card: ScryfallCard) => {
     setCollection((prev) => {

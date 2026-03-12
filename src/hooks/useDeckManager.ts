@@ -10,15 +10,19 @@ import {
 } from "../deck";
 import { cardByName } from "../scryfall";
 
-const STORAGE_KEY = "mtg-decks";
+const STORAGE_PREFIX = "mtg-decks";
 
 const DEFAULT_DECKS: Deck[] = [
   { id: "default", name: "My Deck", cards: [], format: "commander" },
 ];
 
-function loadDecks(): Deck[] {
+function storageKey(userId: string) {
+  return `${STORAGE_PREFIX}-${userId}`;
+}
+
+function loadDecks(userId: string): Deck[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(userId));
     if (raw) return JSON.parse(raw) as Deck[];
   } catch {
     // ignore
@@ -26,24 +30,31 @@ function loadDecks(): Deck[] {
   return DEFAULT_DECKS;
 }
 
-function saveDecks(decks: Deck[]) {
+function saveDecks(userId: string, decks: Deck[]) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(decks));
+    localStorage.setItem(storageKey(userId), JSON.stringify(decks));
   } catch {
     // ignore
   }
 }
 
-export function useDeckManager() {
-  const [decks, setDecks] = useState<Deck[]>(loadDecks);
-  const [activeDeckId, setActiveDeckId] = useState(() => loadDecks()[0].id);
+export function useDeckManager(userId: string) {
+  const [decks, setDecks] = useState<Deck[]>(() => loadDecks(userId));
+  const [activeDeckId, setActiveDeckId] = useState(() => loadDecks(userId)[0].id);
+
+  // Reload when userId changes
+  useEffect(() => {
+    const loaded = loadDecks(userId);
+    setDecks(loaded);
+    setActiveDeckId(loaded[0].id);
+  }, [userId]);
 
   const activeDeck = decks.find((d) => d.id === activeDeckId) ?? decks[0];
 
   // Persist on change
   useEffect(() => {
-    saveDecks(decks);
-  }, [decks]);
+    saveDecks(userId, decks);
+  }, [userId, decks]);
 
   const addToDeck = useCallback(
     (card: ScryfallCard) => {
