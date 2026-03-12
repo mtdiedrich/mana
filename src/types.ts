@@ -107,3 +107,25 @@ export interface ScryfallSearchResponse {
 export interface ScryfallAutocompleteResponse {
   data: string[];
 }
+
+/** Authenticated user */
+export interface User {
+  id: string;
+  email: string;
+  displayName: string;
+}
+
+/** Auth service result */
+export interface AuthResult {
+  ok: true;
+  user: User;
+  token: string;
+}
+
+/** Auth service error */
+export interface AuthError {
+  ok: false;
+  error: string;
+}
+
+export type AuthResponse = AuthResult | AuthError;
