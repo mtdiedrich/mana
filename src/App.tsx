@@ -18,8 +18,9 @@ export default function App() {
   const [selectedCard, setSelectedCard] = useState<ScryfallCard | null>(null);
 
   const search = useSearch();
-  const deckManager = useDeckManager();
-  const { collection, addToCollection, removeFromCollection } = useCollection();
+  const userId = user?.id ?? "";
+  const deckManager = useDeckManager(userId);
+  const { collection, addToCollection, removeFromCollection } = useCollection(userId);
 
   if (!user) {
     return (
