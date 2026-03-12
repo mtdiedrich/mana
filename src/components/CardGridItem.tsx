@@ -6,11 +6,21 @@ import type { ScryfallCard } from "../types";
 interface CardGridItemProps {
   card: ScryfallCard;
   onClick: (card: ScryfallCard) => void;
+  collectionQty?: number;
+  onAdd?: (card: ScryfallCard) => void;
+  onRemove?: (cardId: string) => void;
 }
 
-export const CardGridItem = memo(function CardGridItem({ card, onClick }: CardGridItemProps) {
+export const CardGridItem = memo(function CardGridItem({
+  card,
+  onClick,
+  collectionQty,
+  onAdd,
+  onRemove,
+}: CardGridItemProps) {
   const img = cardImg(card);
   const [hovered, setHovered] = useState(false);
+  const showOverlay = hovered && onAdd && onRemove && collectionQty !== undefined;
 
   return (
     <div
@@ -50,6 +60,85 @@ export const CardGridItem = memo(function CardGridItem({ card, onClick }: CardGr
           }}
         >
           {card.name}
+        </div>
+      )}
+      {showOverlay && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+            gap: 4,
+            padding: "8px 12px",
+            background: "linear-gradient(transparent, rgba(0,0,0,0.85))",
+          }}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(card.id);
+            }}
+            style={{
+              width: 32,
+              height: 28,
+              borderRadius: 4,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: 14,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            −
+          </button>
+          <span
+            style={{
+              minWidth: 28,
+              height: 28,
+              borderRadius: 4,
+              background: T.surface,
+              border: `1px solid ${T.border}`,
+              color: T.accent,
+              fontSize: 13,
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {collectionQty}
+          </span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onAdd(card);
+            }}
+            style={{
+              width: 32,
+              height: 28,
+              borderRadius: 4,
+              border: `1px solid ${T.border}`,
+              background: T.surface,
+              color: T.text,
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: 14,
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            +
+          </button>
         </div>
       )}
     </div>

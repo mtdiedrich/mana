@@ -116,7 +116,13 @@ export default function App() {
         }}
       >
         {view === "search" && (
-          <SearchView {...search} onCardClick={setSelectedCard} />
+          <SearchView
+            {...search}
+            onCardClick={setSelectedCard}
+            collection={collection}
+            addToCollection={addToCollection}
+            removeFromCollection={removeFromCollection}
+          />
         )}
         {view === "deck" && (
           <DeckView {...deckManager} onCardClick={setSelectedCard} />
